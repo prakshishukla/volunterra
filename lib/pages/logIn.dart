@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:volunterra/CustomNavBar.dart';
 import 'package:volunterra/pages/authenticationService.dart';
 import 'package:volunterra/pages/signUp.dart';
 
@@ -27,7 +28,10 @@ class _LogInState extends State<LogIn> {
         emailController.text.trim(),
         passwordController.text.trim(),
       );
-    Navigator.pop(context); // or navigate to another screen
+    Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => CustomNavBar()), // Navigate to CustomNavBar
+        );
 
     } catch (e) {
       setState(() {
@@ -43,6 +47,7 @@ class _LogInState extends State<LogIn> {
 
   @override
   Widget build(BuildContext context) {
+        ThemeData(primarySwatch: Colors.green,);
     return Center(
       child: SingleChildScrollView(
         child: Column(

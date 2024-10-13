@@ -1,10 +1,11 @@
-
+import 'dart:convert';
 import 'package:flutter/material.dart';
-// Remove unused imports
 import 'package:firebase_core/firebase_core.dart';
 import '../firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:geocoding/geocoding.dart'; // For native geocoding
+import 'package:http/http.dart' as http; // For using Google API for web
 
 class AddLocationPage extends StatefulWidget {
   const AddLocationPage({Key? key}) : super(key: key);
@@ -18,31 +19,81 @@ class _AddLocationPageState extends State<AddLocationPage> {
   final _nameController = TextEditingController();
   final _addressController = TextEditingController();
   final _descriptionController = TextEditingController();
-  final _contactController = TextEditingController();
+  final _orgNameController = TextEditingController();
   bool _isLoading = false;
+
+  // Add your Google API key here if you are using the web fallback
+  final String _googleApiKey = 'AIzaSyADBPc3yqH6zr8meS5k1gnij_Hp00IE00o';
+
+  // Fallback function to get coordinates for the web
+  Future<Map<String, double>> _getCoordinatesFromAddress(String address) async {
+    if (kIsWeb) {
+      final Uri url = Uri.parse(
+        'https://maps.googleapis.com/maps/api/geocode/json?address=${Uri.encodeComponent(address)}&key=$_googleApiKey',
+      );
+      final http.Response response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = jsonDecode(response.body);
+        if (data['status'] == 'OK') {
+          final latLng = data['results'][0]['geometry']['location'];
+          return {
+            'latitude': latLng['lat'],
+            'longitude': latLng['lng'],
+          };
+        } else {
+          throw Exception('Failed to retrieve coordinates. Status: ${data['status']}');
+        }
+      } else {
+        throw Exception('Failed to connect to the geocoding service.');
+      }
+    } else {
+      // For mobile or other platforms, use geocoding package
+      List<Location> locations = await locationFromAddress(address);
+      return {
+        'latitude': locations.first.latitude,
+        'longitude': locations.first.longitude,
+      };
+    }
+  }
 
   Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
       setState(() {
         _isLoading = true;
       });
-      
+
       try {
         // Ensure Firebase is properly initialized for web
         if (!kIsWeb) {
-          await Firebase.initializeApp();
+          await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
         }
-        
+
         // Use Firestore instance
         final firestore = FirebaseFirestore.instance;
+
+        // Get coordinates from address (handling both web and mobile platforms)
+        Map<String, double> coordinates = await _getCoordinatesFromAddress(_addressController.text);
+
+        double latitude = coordinates['latitude']!;
+        double longitude = coordinates['longitude']!;
         
-        // Rest of your submission logic
-        print('Form is valid. Submitting...');
-        await firestore.collection('Locations').add({'name': _nameController.text, 'address': _addressController.text, 'description': _descriptionController.text, 'contact': _contactController.text });
+        // Log the coordinates
+        print('Coordinates received: Latitude - $latitude, Longitude - $longitude');
+
+        // Submit data to Firestore
+        await firestore.collection('Locations').add({
+          'name': _nameController.text,
+          'address': _addressController.text,
+          'description': _descriptionController.text,
+          'organization': _orgNameController.text,
+          'latitude': latitude,
+          'longitude': longitude,
+        });
 
         // Clear the form fields
         _descriptionController.clear();
-        _contactController.clear();
+        _orgNameController.clear();
         _nameController.clear();
         _addressController.clear();
 
@@ -52,15 +103,13 @@ class _AddLocationPageState extends State<AddLocationPage> {
         );
       } on FirebaseException catch (e) {
         print('Firebase error: ${e.code} - ${e.message}');
-        print('Stack trace: ${e.stackTrace}');
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: ${e.message}')),
+          SnackBar(content: Text('Firebase error: ${e.message}')),
         );
-      } catch (e, stackTrace) {
+      } on Exception catch (e) {
         print('Error submitting form: $e');
-        print('Stack trace: $stackTrace');
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('An unexpected error occurred. Please try again.')),
+          SnackBar(content: Text('Error: ${e.toString()}')),
         );
       } finally {
         setState(() {
@@ -72,6 +121,7 @@ class _AddLocationPageState extends State<AddLocationPage> {
 
   @override
   Widget build(BuildContext context) {
+        ThemeData(primarySwatch: Colors.green,);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add Location'),
@@ -97,6 +147,14 @@ class _AddLocationPageState extends State<AddLocationPage> {
               ),
               const SizedBox(height: 16),
               TextFormField(
+                controller: _orgNameController,
+                decoration: const InputDecoration(
+                  labelText: 'Organization/Organizer Name',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
                 controller: _addressController,
                 decoration: const InputDecoration(
                   labelText: 'Address',
@@ -119,17 +177,13 @@ class _AddLocationPageState extends State<AddLocationPage> {
                 maxLines: 3,
               ),
               const SizedBox(height: 16),
-              TextFormField(
-                controller: _contactController,
-                decoration: const InputDecoration(
-                  labelText: 'Contact Information',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 16),
               ElevatedButton(
-                onPressed: _submitForm,
-                child: const Text('Submit'),
+                onPressed: _isLoading ? null : _submitForm,
+                child: _isLoading
+                    ? CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      )
+                    : const Text('Submit'),
               ),
             ],
           ),
@@ -137,14 +191,13 @@ class _AddLocationPageState extends State<AddLocationPage> {
       ),
     );
   }
-  
 
   @override
   void dispose() {
     _nameController.dispose();
     _addressController.dispose();
     _descriptionController.dispose();
-    _contactController.dispose();
+    _orgNameController.dispose();
     super.dispose();
   }
 }
