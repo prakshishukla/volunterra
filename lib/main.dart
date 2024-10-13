@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:volunterra/pages/SignUp.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 void main() {
@@ -48,6 +49,8 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
       ),
+      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      //home: SignUp(),
     );
   }
 }
