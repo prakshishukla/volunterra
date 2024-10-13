@@ -1,4 +1,11 @@
 import 'package:flutter/material.dart';
+import 'pages/addLocation.dart';
+import 'pages/favorites.dart';
+import 'pages/map.dart';
+import 'pages/announcements.dart';
+import 'pages/profilePage.dart';
+import 'custom_navbar.dart'; // Ensure to import your custom nav bar
+import 'package:volunterra/pages/SignUp.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'pages/addLocation.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -25,8 +32,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +41,14 @@ class MyHomePage extends StatelessWidget {
       ),
       body: Center(
         child: Text('Hello, World!'),
+
+        title: const Center(
+          child: Text(
+            "VolunTerra",
+            style: TextStyle(fontSize: 36), // Optional: Customize the text style
+          ),
       ),
+      
     );
   }
 }
