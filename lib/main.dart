@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'pages/addLocation.dart';
+import 'pages/favorites.dart';
+import 'pages/map.dart';
+import 'pages/announcements.dart';
+import 'pages/profilePage.dart';
+import 'custom_navbar.dart'; // Ensure to import your custom nav bar
 import 'package:volunterra/pages/SignUp.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -33,6 +39,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'Google Maps Demo',
       theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
         useMaterial3: true,
         colorSchemeSeed: Colors.green[700],
       ),
@@ -49,7 +56,7 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(),
       //home: SignUp(),
     );
   }
@@ -61,15 +68,25 @@ class MyHomePage extends StatefulWidget {
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _HomePageState extends State<HomePage> {
+  int _currentIndex = 0; // Track the current index of the nav bar
 
-  void _incrementCounter() {
+  // List of pages to display
+  final List<Widget> _pages = [
+    AddLocation(),
+    Favorites(),
+    MapPage(),
+    Announcements(),
+    ProfilePage(),
+  ];
+
+  // Update the current index when a nav item is tapped
+  void _onNavItemTapped(int index) {
     setState(() {
-      _counter++;
+      _currentIndex = index; // Set the new index
     });
   }
 
@@ -77,8 +94,11 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
+        title: const Center(
+          child: Text(
+            "VolunTerra",
+            style: TextStyle(fontSize: 36), // Optional: Customize the text style
+          ),
       ),
       body: Center(
         child: Column(
@@ -93,7 +113,14 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ],
         ),
+        toolbarHeight: 60,
       ),
+      body: _pages[_currentIndex], // Display the selected page
+      bottomNavigationBar: CustomNavBar(
+        currentIndex: _currentIndex, // Pass the current index
+        onTap: _onNavItemTapped, // Pass the onTap callback
+      ),
+      backgroundColor: Colors.grey[200], // Set the background color to a light gray
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
         tooltip: 'Increment',
