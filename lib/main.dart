@@ -40,9 +40,9 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'Your App Title',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.green,
       ),
-      home: Scaffold(
+      /*home: Scaffold(
         appBar: AppBar(
           title: const Text('Google Maps Demo'),
           elevation: 2,
@@ -54,15 +54,15 @@ class _MyAppState extends State<MyApp> {
             zoom: 11.0,
           ),
         ),
-      ),
+      ),*/
       //home: const MyHomePage(title: 'Flutter Demo Home Page'),
-      //home: SignUp(),
+      home: SignUp(),
       //home: AddLocationPage(),
     );
   }
 }
 
-
+/*
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,7 +78,6 @@ class _MyAppState extends State<MyApp> {
             style: TextStyle(fontSize: 36), // Optional: Customize the text style
           ),
       ),
-      
+      ) 
     );
-  }
-}
+  }*/
