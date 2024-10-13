@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'pages/addLocation.dart';
 import 'pages/favorites.dart';
 import 'pages/map.dart';
-import 'pages/announcements.dart';
+import 'pages/announcementPage.dart';
 import 'pages/profilePage.dart';
 import 'CustomNavBar.dart'; // Ensure to import your custom nav bar
 import 'package:volunterra/pages/SignUp.dart';

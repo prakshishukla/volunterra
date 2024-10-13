@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'pages/addLocation.dart';
 import 'pages/favorites.dart';
 import 'pages/map.dart';
-import 'pages/announcements.dart';
+import 'pages/announcementPage.dart';
 import 'pages/profilePage.dart';
 
 class CustomNavBar extends StatefulWidget {
   @override
   _CustomNavBarState createState() => _CustomNavBarState();
+
 }
 
 class _CustomNavBarState extends State<CustomNavBar> {
@@ -32,6 +33,7 @@ class _CustomNavBarState extends State<CustomNavBar> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData(primarySwatch: Colors.green,);
     return Scaffold(
       body: _pages[_currentIndex], // Display the selected page
       bottomNavigationBar: BottomNavigationBar(

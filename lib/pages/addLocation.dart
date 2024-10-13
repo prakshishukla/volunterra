@@ -121,6 +121,7 @@ class _AddLocationPageState extends State<AddLocationPage> {
 
   @override
   Widget build(BuildContext context) {
+        ThemeData(primarySwatch: Colors.green,);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add Location'),

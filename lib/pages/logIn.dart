@@ -47,6 +47,7 @@ class _LogInState extends State<LogIn> {
 
   @override
   Widget build(BuildContext context) {
+        ThemeData(primarySwatch: Colors.green,);
     return Center(
       child: SingleChildScrollView(
         child: Column(

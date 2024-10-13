@@ -34,6 +34,7 @@ class _MapPageState extends State<MapPage> {
         final double latitude = data['latitude'];
         final double longitude = data['longitude'];
         final String address = data['address'];
+        final String description = data['description'];
         final String organization = data['organization'];
         final String name = data['name'] ?? 'Unnamed Location';
 
@@ -43,8 +44,8 @@ class _MapPageState extends State<MapPage> {
             markerId: MarkerId(doc.id),
             position: LatLng(latitude, longitude),
             infoWindow: InfoWindow(
-              title: name,
-              snippet: '$organization | $address',
+              title: '$name by $organization',
+              snippet: '$description | $address',
             ),
           ),
         );
@@ -59,6 +60,7 @@ class _MapPageState extends State<MapPage> {
 
   @override
   Widget build(BuildContext context) {
+        ThemeData(primarySwatch: Colors.green,);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Google Maps Demo'),
