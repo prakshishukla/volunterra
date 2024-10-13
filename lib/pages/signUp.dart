@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:volunterra/CustomNavBar.dart';
+import 'package:volunterra/pages/map.dart';
 import 'logIn.dart';
 import 'authenticationService.dart'; // Assuming you have an authentication service
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -44,7 +46,10 @@ class _SignUpState extends State<SignUp> {
       });
 
       // Navigate back or to another screen after signup
-      Navigator.pop(context); // or navigate to another screen
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => CustomNavBar()), // Navigate to CustomNavBar
+        );
   }
     } catch (e) {
       setState(() {
