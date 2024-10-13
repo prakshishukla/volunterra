@@ -11,19 +11,22 @@ class CustomNavBar extends StatefulWidget {
 }
 
 class _CustomNavBarState extends State<CustomNavBar> {
-  int _currentIndex = 1; // Track the currently selected index
+  int _currentIndex = 2; // Track the currently selected index
 
   // List of widgets for each tab
   final List<Widget> _pages = [
-    MapPage(),           // Home (Map) Page
+    
     FavoritesPage(),     // Favorites Page
+    AddLocationPage(),   // Add Location Page (ensure this widget exists)
+    MapPage(),           // Home (Map) Page
     AnnouncementsPage(), // Announcements Page
     ProfilePage(),       // Profile Page
   ];
 
   void _onItemTapped(int index) {
+    if (index < 0 || index >= _pages.length) return; // Ensure index is within bounds
     setState(() {
-      _currentIndex = index; // Update the current index
+      _currentIndex = index; // Update the current index safely
     });
   }
 
@@ -33,10 +36,7 @@ class _CustomNavBarState extends State<CustomNavBar> {
       body: _pages[_currentIndex], // Display the selected page
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.map),
-            label: 'Map',
-          ),
+          
           BottomNavigationBarItem(
             icon: Icon(Icons.favorite),
             label: 'Favorites',
@@ -45,6 +45,10 @@ class _CustomNavBarState extends State<CustomNavBar> {
               icon: Icon(Icons.add_location),
               label: 'Add Location',
             ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.map),
+            label: 'Map',
+          ),
           BottomNavigationBarItem(
             icon: Icon(Icons.announcement),
             label: 'Announcements',

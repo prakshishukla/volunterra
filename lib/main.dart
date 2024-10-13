@@ -51,80 +51,8 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: Colors.green,
       ),
       home: const SignUp(),
-      /*home: Scaffold(
-        body: _pages[_currentIndex], // Display the current page based on index
-        bottomNavigationBar: BottomNavigationBar(
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person_add),
-              label: 'Sign Up',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.map),
-              label: 'Map',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.add_location),
-              label: 'Add Location',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.favorite),
-              label: 'Favorites',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.announcement),
-              label: 'Announcements',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: 'Profile',
-            ),
-          ],
-          currentIndex: _currentIndex, // Highlight the current index
-          onTap: _onNavItemTapped, // Handle navigation
-          selectedItemColor: Colors.green,
-          unselectedItemColor: Colors.grey,
-        ),
-      ),*/
     );
   }
 }
 
 
-/*class _MyAppState extends State<MyApp> {
-  late GoogleMapController mapController;
-  int _currentIndex = 0;
-
-  final LatLng _center = const LatLng(45.521563, -122.677433);
-
-  void _onMapCreated(GoogleMapController controller) {
-    mapController = controller;
-  }  
-  
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Your App Title',
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-      ),
-      /*home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Google Maps Demo'),
-          elevation: 2,
-        ),
-        body: GoogleMap(
-          onMapCreated: _onMapCreated,
-          initialCameraPosition: CameraPosition(
-            target: _center,
-            zoom: 11.0,
-          ),
-        ),
-      ),*/
-      //home: const MyHomePage(title: 'Flutter Demo Home Page'),
-      home: SignUp(),
-      //home: customNavBar(),
-      //home: AddLocationPage(),
-    );
-  }
-} */
